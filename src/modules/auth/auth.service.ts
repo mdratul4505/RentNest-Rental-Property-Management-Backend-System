@@ -13,7 +13,7 @@ const loginUser = async (payload : ILoginUser) => {
         where : {email}
     })
 
-    if (user.activeStatus === "BLOCKED") {
+    if (user.status === "BLOCKED") {
         throw new Error("Your account has been blocked. Please contact support.");
     }
 
@@ -33,15 +33,15 @@ const loginUser = async (payload : ILoginUser) => {
 
     const accessToken = jwtUtils.createToken(
         jwtPayload,
-        config.jwt_access_secret,
-        config.jwt_access_expires_in as SignOptions
+        config.jwt_access_secret as string,
+        { expiresIn: config.jwt_access_expires_in } as SignOptions
     );
 
 
     const refreshToken = jwtUtils.createToken(
         jwtPayload,
-        config.jwt_refresh_secret,
-        config.jwt_refresh_expires_in as SignOptions
+        config.jwt_refresh_secret as string,
+        { expiresIn: config.jwt_refresh_expires_in } as SignOptions
     );
 
     return {

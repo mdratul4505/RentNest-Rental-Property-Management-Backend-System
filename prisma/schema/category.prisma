@@ -3,6 +3,9 @@ model Category {
   name       String     @unique
   properties Property[]
   createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("categories")
 }
 
 model Property {
@@ -24,4 +27,6 @@ model Property {
   reviews     Review[]
 
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@map("properties")
 }
