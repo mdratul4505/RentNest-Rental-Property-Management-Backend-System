@@ -1,0 +1,18 @@
+
+model Payment {
+  id            String        @id @default(cuid())
+  transactionId String        @unique
+  amount        Int
+  method        String?       // e.g. "card", "mobile-banking"
+  provider      String        // "STRIPE" | "SSLCOMMERZ"
+  status        PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+
+  rentalId      String        @unique
+  rental        RentalRequest @relation(fields: [rentalId], references: [id])
+
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+
+  createdAt     DateTime      @default(now())
+}
