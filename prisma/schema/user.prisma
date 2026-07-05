@@ -1,0 +1,15 @@
+
+model User {
+  id         String          @id @default(cuid())
+  name       String
+  email      String          @unique
+  password   String
+  role       Role            @default(TENANT)
+  status     String          @default("active")
+  properties Property[]
+  rentals    RentalRequest[]
+  reviews    Review[]
+  payments   Payment[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
