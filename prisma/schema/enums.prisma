@@ -3,3 +3,11 @@ enum Role {
   LANDLORD
   ADMIN
 }
+
+enum RentalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+}
