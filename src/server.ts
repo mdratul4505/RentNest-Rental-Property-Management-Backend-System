@@ -1,9 +1,9 @@
 import "dotenv/config";
 import app from "./app";
-import config from "./config";
 import { prisma } from "./lib/prisma";
+import config from "./config";
 
-const PORT = config.port;
+const PORT = config.port || 5000
 
 async function main() {
     try {
