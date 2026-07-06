@@ -1,4 +1,6 @@
+import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
+import { AppError } from "../../errors/AppError";
 
 const createPropertyIntoDB = async (payload: any, landlordId: string) => {
   const result = await prisma.property.create({
@@ -16,11 +18,11 @@ const updatePropertyInDB = async (propertyId: string, payload: any, landlordId: 
   });
 
   if (!property) {
-    throw new Error("Property not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found");
   }
 
   if (property.landlordId !== landlordId) {
-    throw new Error("You do not have permission to update this property");
+    throw new AppError(httpStatus.FORBIDDEN, "You do not have permission to update this property");
   }
 
   const result = await prisma.property.update({
@@ -36,11 +38,11 @@ const deletePropertyFromDB = async (propertyId: string, landlordId: string) => {
   });
 
   if (!property) {
-    throw new Error("Property not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found");
   }
 
   if (property.landlordId !== landlordId) {
-    throw new Error("You do not have permission to delete this property");
+    throw new AppError(httpStatus.FORBIDDEN, "You do not have permission to delete this property");
   }
 
   // Delete associated reviews & rentals to satisfy foreign key constraints
@@ -168,7 +170,7 @@ const getPropertyByIdFromDB = async (id: string) => {
   });
 
   if (!result) {
-    throw new Error("Property not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Property not found");
   }
 
   return result;

@@ -1,4 +1,6 @@
+import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
+import { AppError } from "../../errors/AppError";
 import { RentalStatus } from "../../../generated/prisma";
 
 const createReviewIntoDB = async (
@@ -18,7 +20,8 @@ const createReviewIntoDB = async (
   });
 
   if (!rental) {
-    throw new Error(
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
       "You can only review properties that you have rented with active or completed status"
     );
   }

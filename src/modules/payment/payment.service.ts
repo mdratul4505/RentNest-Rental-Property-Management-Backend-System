@@ -1,6 +1,8 @@
 import Stripe from "stripe";
+import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
 import config from "../../config";
+import { AppError } from "../../errors/AppError";
 import { PaymentStatus, RentalStatus } from "../../../generated/prisma";
 
 const stripe = new Stripe(config.stripe_secret_key || "", {
@@ -9,7 +11,7 @@ const stripe = new Stripe(config.stripe_secret_key || "", {
 
 const createPaymentIntentInDB = async (rentalId: string, userId: string) => {
   if (!config.stripe_secret_key) {
-    throw new Error("Stripe secret key is not configured");
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Stripe secret key is not configured");
   }
 
   const rental = await prisma.rentalRequest.findUnique({
@@ -21,20 +23,20 @@ const createPaymentIntentInDB = async (rentalId: string, userId: string) => {
   });
 
   if (!rental) {
-    throw new Error("Rental request not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Rental request not found");
   }
 
   if (rental.tenantId !== userId) {
-    throw new Error("You do not have permission to pay for this rental request");
+    throw new AppError(httpStatus.FORBIDDEN, "You do not have permission to pay for this rental request");
   }
 
   if (rental.status !== RentalStatus.APPROVED) {
-    throw new Error("Rental request is not approved yet");
+    throw new AppError(httpStatus.BAD_REQUEST, "Rental request is not approved yet");
   }
 
   if (rental.payment) {
     if (rental.payment.status === PaymentStatus.COMPLETED) {
-      throw new Error("Payment has already been completed for this rental request");
+      throw new AppError(httpStatus.BAD_REQUEST, "Payment has already been completed for this rental request");
     }
     // Delete existing pending payment to avoid duplicates
     await prisma.payment.delete({
@@ -75,7 +77,7 @@ const createPaymentIntentInDB = async (rentalId: string, userId: string) => {
 
 const confirmPaymentInDB = async (transactionId: string, userId: string) => {
   if (!config.stripe_secret_key) {
-    throw new Error("Stripe secret key is not configured");
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Stripe secret key is not configured");
   }
 
   const payment = await prisma.payment.findUnique({
@@ -86,11 +88,11 @@ const confirmPaymentInDB = async (transactionId: string, userId: string) => {
   });
 
   if (!payment) {
-    throw new Error("Payment record not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Payment record not found");
   }
 
   if (payment.userId !== userId) {
-    throw new Error("You are not authorized to confirm this payment");
+    throw new AppError(httpStatus.FORBIDDEN, "You are not authorized to confirm this payment");
   }
 
   if (payment.status === PaymentStatus.COMPLETED) {
@@ -100,7 +102,7 @@ const confirmPaymentInDB = async (transactionId: string, userId: string) => {
   // Retrieve status from Stripe to verify actual payment success
   const paymentIntent = await stripe.paymentIntents.retrieve(transactionId);
   if (paymentIntent.status !== "succeeded") {
-    throw new Error(`Payment has not succeeded on Stripe. Status: ${paymentIntent.status}`);
+    throw new AppError(httpStatus.BAD_REQUEST, `Payment has not succeeded on Stripe. Status: ${paymentIntent.status}`);
   }
 
   // Use transaction to update payment status, rental status, and property availability
@@ -162,11 +164,11 @@ const getPaymentByIdFromDB = async (id: string, userId: string, role: string) =>
   });
 
   if (!payment) {
-    throw new Error("Payment not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Payment not found");
   }
 
   if (role !== "ADMIN" && payment.userId !== userId) {
-    throw new Error("You do not have permission to view this payment");
+    throw new AppError(httpStatus.FORBIDDEN, "You do not have permission to view this payment");
   }
 
   return payment;
