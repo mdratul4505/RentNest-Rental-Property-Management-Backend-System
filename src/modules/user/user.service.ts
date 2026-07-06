@@ -57,7 +57,44 @@ const getMe = async (userId: string) => {
   return user;
 };
 
+const getAllUsersFromDB = async () => {
+  return await prisma.user.findMany({
+    omit: { password: true },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const updateUserStatusInDB = async (userId: string, status: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (user.role === Role.ADMIN) {
+    throw new AppError(httpStatus.FORBIDDEN, "You cannot modify status of an ADMIN");
+  }
+
+  const normalizedStatus = status.toUpperCase();
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      status: normalizedStatus,
+    },
+    omit: { password: true },
+  });
+
+  return updatedUser;
+};
+
 export const userService = {
   registerUserIntoDB,
   getMe,
+  getAllUsersFromDB,
+  updateUserStatusInDB,
 };

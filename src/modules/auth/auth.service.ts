@@ -13,7 +13,7 @@ const loginUser = async (payload : ILoginUser) => {
         where : {email}
     })
 
-    if (user.status === "BLOCKED") {
+    if (user.status && user.status.toUpperCase() === "BLOCKED") {
         throw new Error("Your account has been blocked. Please contact support.");
     }
 

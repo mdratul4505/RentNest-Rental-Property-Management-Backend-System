@@ -33,7 +33,36 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Admin get all users
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.getAllUsersFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Users retrieved successfully",
+    data: result,
+  });
+});
+
+// Admin update user status (ban/unban)
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const result = await userService.updateUserStatusInDB(id, status);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User status updated successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   registerUser,
   getMe,
+  getAllUsers,
+  updateUserStatus,
 };
