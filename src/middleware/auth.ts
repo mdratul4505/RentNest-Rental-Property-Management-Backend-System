@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import jwt from "jsonwebtoken";
 import config from "../config";
 import { AppError } from "../errors/AppError";
 import { Role } from "../../generated/prisma";
+import { jwtUtils } from "../utils/jwt";
 
 
 export type TDecodedUser = {
@@ -24,7 +24,7 @@ export const auth = (...allowedRoles: Role[]) => {
         throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
       }
 
-      const decoded = jwt.verify(
+      const decoded = jwtUtils.verifyToken(
         token,
         config.jwt_access_secret as string
       ) as TDecodedUser;
