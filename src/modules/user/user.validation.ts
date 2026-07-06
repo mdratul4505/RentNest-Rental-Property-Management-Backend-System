@@ -3,11 +3,11 @@ import { Role } from "../../../generated/prisma";
 
 const registerUserValidationSchema = z.object({
   body: z.object({
-    name: z.string({ required_error: "Name is required" }).min(1, "Name cannot be empty"),
-    email: z.string({ required_error: "Email is required" }).email("Invalid email address"),
-    password: z.string({ required_error: "Password is required" }).min(6, "Password must be at least 6 characters"),
+    name: z.string({ message: "Name is required" }).min(1, "Name cannot be empty"),
+    email: z.string({ message: "Email is required" }).email("Invalid email address"),
+    password: z.string({ message: "Password is required" }).min(6, "Password must be at least 6 characters"),
     role: z.enum([Role.TENANT, Role.LANDLORD], {
-      required_error: "Role is required and must be either TENANT or LANDLORD",
+      message: "Role is required and must be either TENANT or LANDLORD",
     }),
   }),
 });
@@ -15,7 +15,7 @@ const registerUserValidationSchema = z.object({
 const updateUserStatusValidationSchema = z.object({
   body: z.object({
     status: z.enum(["active", "blocked", "ACTIVE", "BLOCKED"], {
-      required_error: "Status is required and must be active or blocked",
+      message: "Status is required and must be active or blocked",
     }),
   }),
 });

@@ -19,7 +19,7 @@ const createProperty = catchAsync(async (req: Request, res: Response) => {
 const updateProperty = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const landlordId = req.user!.id;
-  const result = await propertyService.updatePropertyInDB(id, req.body, landlordId);
+  const result = await propertyService.updatePropertyInDB(id as string, req.body, landlordId);
 
   sendResponse(res, {
     success: true,
@@ -32,7 +32,7 @@ const updateProperty = catchAsync(async (req: Request, res: Response) => {
 const deleteProperty = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const landlordId = req.user!.id;
-  const result = await propertyService.deletePropertyFromDB(id, landlordId);
+  const result = await propertyService.deletePropertyFromDB(id as string, landlordId);
 
   sendResponse(res, {
     success: true,
@@ -55,7 +55,7 @@ const getAllProperties = catchAsync(async (req: Request, res: Response) => {
 
 const getPropertyById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await propertyService.getPropertyByIdFromDB(id);
+  const result = await propertyService.getPropertyByIdFromDB(id as string);
 
   sendResponse(res, {
     success: true,

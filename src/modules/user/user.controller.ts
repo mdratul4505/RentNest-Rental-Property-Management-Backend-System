@@ -50,7 +50,7 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { status } = req.body;
 
-  const result = await userService.updateUserStatusInDB(id, status);
+  const result = await userService.updateUserStatusInDB(id as string, status as string);
 
   sendResponse(res, {
     success: true,

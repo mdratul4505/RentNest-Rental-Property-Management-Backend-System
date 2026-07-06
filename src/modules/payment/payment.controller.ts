@@ -50,7 +50,7 @@ const getPaymentById = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const role = req.user!.role;
 
-  const result = await paymentService.getPaymentByIdFromDB(id, userId, role);
+  const result = await paymentService.getPaymentByIdFromDB(id as string, userId, role);
 
   sendResponse(res, {
     success: true,

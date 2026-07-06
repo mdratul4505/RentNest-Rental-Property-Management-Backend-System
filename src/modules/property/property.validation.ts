@@ -2,12 +2,12 @@ import { z } from "zod";
 
 const createPropertyValidationSchema = z.object({
   body: z.object({
-    title: z.string({ required_error: "Title is required" }).min(1),
-    description: z.string({ required_error: "Description is required" }).min(1),
-    location: z.string({ required_error: "Location is required" }).min(1),
-    price: z.number({ required_error: "Price is required" }).positive("Price must be positive"),
+    title: z.string({ message: "Title is required" }).min(1),
+    description: z.string({ message: "Description is required" }).min(1),
+    location: z.string({ message: "Location is required" }).min(1),
+    price: z.number({ message: "Price is required" }).positive("Price must be positive"),
     amenities: z.array(z.string()).min(1, "At least one amenity is required"),
-    categoryId: z.string({ required_error: "CategoryId is required" }),
+    categoryId: z.string({ message: "CategoryId is required" }),
   }),
 });
 

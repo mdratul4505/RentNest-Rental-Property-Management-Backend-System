@@ -40,7 +40,7 @@ const getRentalRequestById = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const role = req.user!.role;
 
-  const result = await rentalRequestService.getRentalRequestByIdFromDB(id, userId, role);
+  const result = await rentalRequestService.getRentalRequestByIdFromDB(id as string, userId, role);
 
   sendResponse(res, {
     success: true,
@@ -67,7 +67,7 @@ const updateRentalRequestStatus = catchAsync(async (req: Request, res: Response)
   const { status } = req.body;
   const landlordId = req.user!.id;
 
-  const result = await rentalRequestService.updateRentalRequestStatusInDB(id, status, landlordId);
+  const result = await rentalRequestService.updateRentalRequestStatusInDB(id as string, status, landlordId);
 
   sendResponse(res, {
     success: true,
