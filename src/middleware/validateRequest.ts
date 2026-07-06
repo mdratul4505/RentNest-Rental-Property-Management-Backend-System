@@ -12,7 +12,12 @@ export const validateRequest = (schema: ZodSchema) => {
       })) as any;
 
       req.body = parsed.body;
-      req.query = parsed.query;
+      Object.defineProperty(req, "query", {
+        value: parsed.query,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
       req.params = parsed.params;
 
       next();
