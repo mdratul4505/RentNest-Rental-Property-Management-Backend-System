@@ -1,9 +1,9 @@
-import { JwtPayload } from "jsonwebtoken";
+import { TDecodedUser } from "../middleware/auth";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload & { userId: string; role: string };
+      user?: TDecodedUser;
     }
   }
 }
