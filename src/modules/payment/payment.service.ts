@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
-import config from "../../config";
+import config from "../../config/index.js";
 import { AppError } from "../../errors/AppError";
 import { PaymentStatus, RentalStatus } from "../../../generated/prisma";
 

@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import httpStatus from "http-status";
-import config from "../../config";
+import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../errors/AppError";
 import { Role } from "../../../generated/prisma";

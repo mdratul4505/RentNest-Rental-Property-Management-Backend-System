@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { SignOptions } from "jsonwebtoken";
 import httpStatus from "http-status";
-import config from "../../config";
+import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
 import { AppError } from "../../errors/AppError";

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import config from "../config";
+import config from "../config/index.js";
 import { AppError } from "../errors/AppError";
 import { Role } from "../../generated/prisma";
 import { jwtUtils } from "../utils/jwt";
