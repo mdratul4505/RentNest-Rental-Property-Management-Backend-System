@@ -3,6 +3,15 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../errors/AppError";
 
 const createPropertyIntoDB = async (payload: any, landlordId: string) => {
+  // Check if category exists
+  const category = await prisma.category.findUnique({
+    where: { id: payload.categoryId },
+  });
+
+  if (!category) {
+    throw new AppError(httpStatus.NOT_FOUND, "Category not found");
+  }
+
   const result = await prisma.property.create({
     data: {
       ...payload,
@@ -23,6 +32,17 @@ const updatePropertyInDB = async (propertyId: string, payload: any, landlordId: 
 
   if (property.landlordId !== landlordId) {
     throw new AppError(httpStatus.FORBIDDEN, "You do not have permission to update this property");
+  }
+
+  // Check if category exists if categoryId is being updated
+  if (payload.categoryId) {
+    const category = await prisma.category.findUnique({
+      where: { id: payload.categoryId },
+    });
+
+    if (!category) {
+      throw new AppError(httpStatus.NOT_FOUND, "Category not found");
+    }
   }
 
   const result = await prisma.property.update({
