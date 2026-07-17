@@ -1,16 +1,16 @@
 {
   "info": {
-    "_postman_id": "8c5934a3-76f5-412e-a58f-49ff59bc6b36",
-    "name": "RentNest API Collection",
-    "description": "Postman Collection for RentNest - Rental Property Management Backend API",
+    "_postman_id": "ba155a84-e286-4783-ba85-788f691d187e",
+    "name": "RentNest API",
+    "description": "Clean Postman Collection for RentNest API matching request structure",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Authentication",
+      "name": "Auth",
       "item": [
         {
-          "name": "Register Tenant",
+          "name": "Register",
           "request": {
             "method": "POST",
             "header": [
@@ -21,12 +21,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Jane Tenant\",\n  \"email\": \"tenant@rentnest.com\",\n  \"password\": \"Tenant123!\",\n  \"role\": \"TENANT\"\n}"
+              "raw": "{\n  \"name\": \"Test Tenant\",\n  \"email\": \"tenant@rentnest.com\",\n  \"password\": \"Tenant123!\",\n  \"role\": \"TENANT\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/auth/register",
+              "raw": "{{baseUrl}}/api/auth/register",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -38,7 +38,7 @@
           "response": []
         },
         {
-          "name": "Register Landlord",
+          "name": "Login",
           "request": {
             "method": "POST",
             "header": [
@@ -49,54 +49,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"John Landlord\",\n  \"email\": \"landlord@rentnest.com\",\n  \"password\": \"Landlord123!\",\n  \"role\": \"LANDLORD\"\n}"
+              "raw": "{\n  \"email\": \"tenant@rentnest.com\",\n  \"password\": \"Tenant123!\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/auth/register",
+              "raw": "{{baseUrl}}/api/auth/login",
               "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Login User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const responseJson = pm.response.json();",
-                  "if (responseJson && responseJson.data && responseJson.data.accessToken) {",
-                  "    pm.environment.set(\"accessToken\", responseJson.data.accessToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@rentnest.com\",\n  \"password\": \"AdminRentNest2026!\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/auth/login",
-              "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -108,14 +66,14 @@
           "response": []
         },
         {
-          "name": "Get Current User Profile",
+          "name": "Me",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -123,9 +81,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/auth/me",
+              "raw": "{{baseUrl}}/api/auth/me",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -142,32 +100,14 @@
       "name": "Categories",
       "item": [
         {
-          "name": "Get All Categories",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/categories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Category (Admin only)",
+          "name": "Create Category",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{adminToken}}",
                   "type": "string"
                 }
               ]
@@ -181,12 +121,30 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Penthouse\"\n}"
+              "raw": "{\n  \"name\": \"Apartment\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/categories",
+              "raw": "{{baseUrl}}/api/categories",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": [
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -202,79 +160,14 @@
       "name": "Properties",
       "item": [
         {
-          "name": "Get Properties (With filters)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/properties?location=Dhaka&minPrice=5000&maxPrice=30000&categoryId=&amenities=WiFi",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "properties"
-              ],
-              "query": [
-                {
-                  "key": "location",
-                  "value": "Dhaka"
-                },
-                {
-                  "key": "minPrice",
-                  "value": "5000"
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "30000"
-                },
-                {
-                  "key": "categoryId",
-                  "value": ""
-                },
-                {
-                  "key": "amenities",
-                  "value": "WiFi"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Property Details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/properties/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "properties",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "property_cuid_here"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Property (Landlord only)",
+          "name": "Create Property",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{landlordToken}}",
                   "type": "string"
                 }
               ]
@@ -288,12 +181,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Luxury Studio Apartment\",\n  \"description\": \"A spacious and luxury studio apartment fully furnished in Dhaka.\",\n  \"location\": \"Gulshan, Dhaka\",\n  \"price\": 25000,\n  \"amenities\": [\"WiFi\", \"AC\", \"Gym\", \"Elevator\"],\n  \"categoryId\": \"category_cuid_here\"\n}"
+              "raw": "{\n  \"title\": \"Cozy 2BR Apartment\",\n  \"description\": \"Fully furnished apartment in city center.\",\n  \"location\": \"Dhaka\",\n  \"price\": 15000,\n  \"amenities\": [\"WiFi\", \"AC\", \"Parking\"],\n  \"categoryId\": \"{{categoryId}}\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/landlord/properties",
+              "raw": "{{baseUrl}}/api/landlord/properties",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -305,14 +198,51 @@
           "response": []
         },
         {
-          "name": "Update Property (Landlord only)",
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/properties",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/properties/{{propertyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties",
+                "{{propertyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{landlordToken}}",
                   "type": "string"
                 }
               ]
@@ -326,38 +256,32 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"price\": 27000,\n  \"isAvailable\": true\n}"
+              "raw": "{\n  \"title\": \"Updated Cozy 2BR Apartment\",\n  \"price\": 16000\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/landlord/properties/:id",
+              "raw": "{{baseUrl}}/api/landlord/properties/{{propertyId}}",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "landlord",
                 "properties",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "property_cuid_here"
-                }
+                "{{propertyId}}"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete Property (Landlord only)",
+          "name": "Delete",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{landlordToken}}",
                   "type": "string"
                 }
               ]
@@ -365,21 +289,15 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/landlord/properties/:id",
+              "raw": "{{baseUrl}}/api/landlord/properties/{{propertyId}}",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "landlord",
                 "properties",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "property_cuid_here"
-                }
+                "{{propertyId}}"
               ]
             }
           },
@@ -388,17 +306,17 @@
       ]
     },
     {
-      "name": "Rental Requests",
+      "name": "Rentals",
       "item": [
         {
-          "name": "Submit Rental Request (Tenant only)",
+          "name": "Create Rental",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -412,12 +330,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"propertyId\": \"property_cuid_here\",\n  \"moveInDate\": \"2026-08-01T12:00:00Z\"\n}"
+              "raw": "{\n  \"propertyId\": \"{{propertyId}}\",\n  \"moveInDate\": \"2026-08-01T00:00:00.000Z\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/rentals",
+              "raw": "{{baseUrl}}/api/rentals",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -428,14 +346,14 @@
           "response": []
         },
         {
-          "name": "Get My Rental Requests",
+          "name": "Get Rentals",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -443,9 +361,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/rentals",
+              "raw": "{{baseUrl}}/api/rentals",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -456,78 +374,14 @@
           "response": []
         },
         {
-          "name": "Get Rental Request Details",
+          "name": "Approve Rental",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/rentals/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "rentals",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "rental_cuid_here"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Landlord Requests (Landlord only)",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/landlord/requests",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "landlord",
-                "requests"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Approve or Reject Rental (Landlord only)",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{landlordToken}}",
                   "type": "string"
                 }
               ]
@@ -544,21 +398,15 @@
               "raw": "{\n  \"status\": \"APPROVED\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/landlord/requests/:id",
+              "raw": "{{baseUrl}}/api/landlord/requests/{{rentalId}}",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "landlord",
                 "requests",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "rental_cuid_here"
-                }
+                "{{rentalId}}"
               ]
             }
           },
@@ -567,17 +415,17 @@
       ]
     },
     {
-      "name": "Payments (Stripe)",
+      "name": "Payments",
       "item": [
         {
-          "name": "Create Payment Intent (Tenant only)",
+          "name": "Create Payment",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -591,12 +439,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"rentalId\": \"rental_cuid_here\"\n}"
+              "raw": "{\n  \"rentalId\": \"{{rentalId}}\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/payments/create",
+              "raw": "{{baseUrl}}/api/payments/create",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -608,14 +456,14 @@
           "response": []
         },
         {
-          "name": "Confirm Stripe Payment (Tenant only)",
+          "name": "Confirm Payment",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -629,12 +477,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"transactionId\": \"pi_3PwhP5K1YgB2xP9x4q7eD3R5\"\n}"
+              "raw": "{\n  \"transactionId\": \"pi_some_stripe_id\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/payments/confirm",
+              "raw": "{{baseUrl}}/api/payments/confirm",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -646,14 +494,14 @@
           "response": []
         },
         {
-          "name": "Get My Payment History",
+          "name": "Payment History",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -661,48 +509,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/payments",
+              "raw": "{{baseUrl}}/api/payments",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "payments"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Payment Details",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/payments/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "payments",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "payment_cuid_here"
-                }
               ]
             }
           },
@@ -714,14 +527,14 @@
       "name": "Reviews",
       "item": [
         {
-          "name": "Create Review (Tenant only)",
+          "name": "Create Review",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{tenantToken}}",
                   "type": "string"
                 }
               ]
@@ -735,12 +548,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"propertyId\": \"property_cuid_here\",\n  \"rating\": 5,\n  \"comment\": \"Amazing property, very clean and matches description perfectly!\"\n}"
+              "raw": "{\n  \"propertyId\": \"{{propertyId}}\",\n  \"rating\": 5,\n  \"comment\": \"Great property!\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/reviews",
+              "raw": "{{baseUrl}}/api/reviews",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -753,17 +566,17 @@
       ]
     },
     {
-      "name": "Admin Panel",
+      "name": "Admin",
       "item": [
         {
-          "name": "Get All Users",
+          "name": "Get Users",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{adminToken}}",
                   "type": "string"
                 }
               ]
@@ -771,9 +584,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/admin/users",
+              "raw": "{{baseUrl}}/api/admin/users",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -785,14 +598,14 @@
           "response": []
         },
         {
-          "name": "Ban or Unban User",
+          "name": "Ban User",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{adminToken}}",
                   "type": "string"
                 }
               ]
@@ -806,12 +619,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"blocked\"\n}"
+              "raw": "{\n  \"status\": \"BLOCKED\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/admin/users/:id",
+              "raw": "{{baseUrl}}/api/admin/users/:id",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -822,7 +635,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "user_cuid_here"
+                  "value": "user_id_here"
                 }
               ]
             }
@@ -830,14 +643,14 @@
           "response": []
         },
         {
-          "name": "View All Properties",
+          "name": "Get Rentals",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{accessToken}}",
+                  "value": "{{adminToken}}",
                   "type": "string"
                 }
               ]
@@ -845,38 +658,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/admin/properties",
+              "raw": "{{baseUrl}}/api/admin/rentals",
               "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "properties"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "View All Rental Requests",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/admin/rentals",
-              "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -892,12 +676,37 @@
   ],
   "variable": [
     {
-      "key": "base_url",
+      "key": "baseUrl",
       "value": "http://localhost:5000",
       "type": "string"
     },
     {
-      "key": "accessToken",
+      "key": "landlordToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tenantToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "propertyId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rentalId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
       "value": "",
       "type": "string"
     }
