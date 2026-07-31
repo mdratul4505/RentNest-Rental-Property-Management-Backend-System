@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./src",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "ignoreDeprecations": "6.0",
@@ -16,6 +17,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  // "include": ["src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

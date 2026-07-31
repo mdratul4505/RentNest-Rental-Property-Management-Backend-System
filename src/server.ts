@@ -3,15 +3,16 @@ import app from "./app";
 import { prisma } from "./lib/prisma";
 import config from "./config/index.js";
 
-const PORT = config.port || 5000
+const PORT = Number(config.port) || 5000;
 
-async function main() {
+async function startLocalServer() {
     try {
         await prisma.$connect();
         console.log("Connected to the database successfully.");
-       app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-       }) 
+
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
     } catch (error) {
         console.error("Error starting the server:", error);
         await prisma.$disconnect();
@@ -19,6 +20,9 @@ async function main() {
     }
 }
 
-main();
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+    startLocalServer();
+}
 
 export default app;
+module.exports = app;
