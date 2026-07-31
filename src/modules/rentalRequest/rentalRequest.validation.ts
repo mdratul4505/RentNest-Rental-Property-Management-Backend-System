@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RentalStatus } from "../../../generated/prisma";
+import { RentalStatus } from "@prisma/client";
 
 const createRentalRequestValidationSchema = z.object({
   body: z.object({

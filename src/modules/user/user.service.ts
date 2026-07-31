@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../errors/AppError";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 import { RegisterUserPayload } from "./user.interface";
 
 const registerUserIntoDB = async (payload: RegisterUserPayload) => {

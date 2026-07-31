@@ -5,7 +5,7 @@ import { rentalRequestController } from "../rentalRequest/rentalRequest.controll
 import { auth } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { UserValidation } from "../user/user.validation";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const router = Router();
 

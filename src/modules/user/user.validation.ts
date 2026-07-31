@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const registerUserValidationSchema = z.object({
   body: z.object({

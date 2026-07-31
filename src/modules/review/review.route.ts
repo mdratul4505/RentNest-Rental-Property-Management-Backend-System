@@ -3,7 +3,7 @@ import { reviewController } from "./review.controller";
 import { auth } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { ReviewValidation } from "./review.validation";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const router = Router();
 

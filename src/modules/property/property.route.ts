@@ -3,7 +3,7 @@ import { propertyController } from "./property.controller";
 import { auth } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { PropertyValidation } from "./property.validation";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const publicRouter = Router();
 publicRouter.get("/", propertyController.getAllProperties);

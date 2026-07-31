@@ -3,7 +3,7 @@ import { rentalRequestController } from "./rentalRequest.controller";
 import { auth } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { RentalRequestValidation } from "./rentalRequest.validation";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const rentalsRouter = Router();
 rentalsRouter.post(

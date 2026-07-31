@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
 import config from "../../config/index.js";
 import { AppError } from "../../errors/AppError";
-import { PaymentStatus, RentalStatus } from "../../../generated/prisma";
+import { PaymentStatus, RentalStatus } from "@prisma/client";
 
 const stripe = new Stripe(config.stripe_secret_key || "", {
   apiVersion: "2025-01-27.accredited-gratis" as any, // standard api version or fallback

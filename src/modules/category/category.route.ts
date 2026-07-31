@@ -3,7 +3,7 @@ import { categoryController } from "./category.controller";
 import { auth } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { CategoryValidation } from "./category.validation";
-import { Role } from "../../../generated/prisma";
+import { Role } from "@prisma/client";
 
 const router = Router();
 

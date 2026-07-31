@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../errors/AppError";
-import { RentalStatus } from "../../../generated/prisma";
+import { RentalStatus } from "@prisma/client";
 
 const createReviewIntoDB = async (
   payload: { propertyId: string; rating: number; comment: string },
