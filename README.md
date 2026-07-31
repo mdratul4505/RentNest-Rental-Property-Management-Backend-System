@@ -5,6 +5,9 @@ RentNest is a feature-rich, secure, and robust backend API for a rental property
 
 ---
 
+## Live Link : https://rentnest-backend-taupe.vercel.app/
+## Git Ripo : https://github.com/mdratul4505/RentNest-Rental-Property-Management-Backend-System.git
+
 ## 🛠️ Technology Stack
 - **Core Platform**: Node.js & Express.js (v5+)
 - **Language**: TypeScript

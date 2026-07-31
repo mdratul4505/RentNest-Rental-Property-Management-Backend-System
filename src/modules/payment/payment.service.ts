@@ -6,7 +6,7 @@ import { AppError } from "../../errors/AppError";
 import { PaymentStatus, RentalStatus } from "@prisma/client";
 
 const stripe = new Stripe(config.stripe_secret_key || "", {
-  apiVersion: "2025-01-27.accredited-gratis" as any, // standard api version or fallback
+  apiVersion: "2022-11-15" as any, // standard api version
 });
 
 const createPaymentIntentInDB = async (rentalId: string, userId: string) => {
