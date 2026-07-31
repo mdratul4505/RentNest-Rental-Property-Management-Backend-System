@@ -9,6 +9,7 @@ const registerUserValidationSchema = z.object({
     role: z.enum([Role.TENANT, Role.LANDLORD], {
       message: "Role is required and must be either TENANT or LANDLORD",
     }),
+    image: z.string().optional(),
   }),
 });
 

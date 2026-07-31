@@ -7,7 +7,7 @@ import { Role } from "../../../generated/prisma";
 import { RegisterUserPayload } from "./user.interface";
 
 const registerUserIntoDB = async (payload: RegisterUserPayload) => {
-  const { name, email, password, role } = payload;
+  const { name, email, password, role, image } = payload;
 
   // Admin role registration through public endpoint ঠিক না
   if (role === Role.ADMIN) {
@@ -30,6 +30,7 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
       email,
       password: hashedPassword,
       role,
+      image,
     },
   });
 

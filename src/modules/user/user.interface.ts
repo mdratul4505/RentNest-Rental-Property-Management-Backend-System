@@ -5,4 +5,5 @@ export type RegisterUserPayload = {
   email: string;
   password: string;
   role: Role; 
+  image?: string;
 };
