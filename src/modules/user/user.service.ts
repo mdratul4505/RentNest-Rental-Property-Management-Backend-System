@@ -1,9 +1,11 @@
 import bcrypt from "bcryptjs";
+import { SignOptions } from "jsonwebtoken";
 import httpStatus from "http-status";
 import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../errors/AppError";
 import { Role } from "@prisma/client";
+import { jwtUtils } from "../../utils/jwt";
 import { RegisterUserPayload } from "./user.interface";
 
 const registerUserIntoDB = async (payload: RegisterUserPayload) => {
@@ -39,7 +41,30 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
     omit: { password: true },
   });
 
-  return user;
+  const jwtPayload = {
+    id: createdUser.id,
+    name: createdUser.name,
+    email: createdUser.email,
+    role: createdUser.role,
+  };
+
+  const accessToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    { expiresIn: config.jwt_access_expires_in } as SignOptions
+  );
+
+  const refreshToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    { expiresIn: config.jwt_refresh_expires_in } as SignOptions
+  );
+
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
 };
 
 

@@ -7,13 +7,27 @@ import { userService } from "./user.service";
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
 
-  const user = await userService.registerUserIntoDB(payload);
+  const { user, accessToken, refreshToken } = await userService.registerUserIntoDB(payload);
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24,
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  });
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
     message: "User registered successfully",
-    data: { user },
+    data: { accessToken, refreshToken, user },
   });
 });
 

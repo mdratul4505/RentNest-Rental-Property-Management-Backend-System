@@ -216,6 +216,20 @@ const getAllPropertiesForAdminFromDB = async () => {
   });
 };
 
+const getMyPropertiesFromDB = async (landlordId: string) => {
+  return await prisma.property.findMany({
+    where: { landlordId },
+    include: {
+      category: true,
+      rentals: true,
+      reviews: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 export const propertyService = {
   createPropertyIntoDB,
   updatePropertyInDB,
@@ -223,4 +237,5 @@ export const propertyService = {
   getAllPropertiesFromDB,
   getPropertyByIdFromDB,
   getAllPropertiesForAdminFromDB,
+  getMyPropertiesFromDB,
 };

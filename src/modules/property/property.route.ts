@@ -10,6 +10,11 @@ publicRouter.get("/", propertyController.getAllProperties);
 publicRouter.get("/:id", propertyController.getPropertyById);
 
 const landlordRouter = Router();
+landlordRouter.get(
+  "/",
+  auth(Role.LANDLORD),
+  propertyController.getMyProperties
+);
 landlordRouter.post(
   "/",
   auth(Role.LANDLORD),
